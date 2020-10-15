@@ -6,7 +6,7 @@ from ..helpers import new_due_date, overdue_by, process_word_row
 from ..decorators import token_required
 
 
-@main.route('/add-word', methods=['POST'])
+@main.route('/api/add-word', methods=['POST'])
 def add_word():
     word = request.get_json(force=True)
 
@@ -23,7 +23,7 @@ def add_word():
 
     return res
 
-@main.route('/remove-word', methods=['POST'])
+@main.route('/api/remove-word', methods=['POST'])
 def remove_word():
     word_id = request.get_json(force=True)
 
@@ -39,7 +39,7 @@ def remove_word():
 
     return res
 
-@main.route('/get-word/<character>/<char_set>')
+@main.route('/api/get-word/<character>/<char_set>')
 def get_word(character, char_set):
 
     word_list = Word.query.filter(getattr(Word, char_set) == character).all()
@@ -50,7 +50,7 @@ def get_word(character, char_set):
 
     return res
 
-@main.route('/get-user-words')
+@main.route('/api/get-user-words')
 @token_required
 def get_user_words(current_user):
 
@@ -67,7 +67,7 @@ def get_user_words(current_user):
     
     return res
 
-@main.route('/get-due-user-words')
+@main.route('/api/get-due-user-words')
 @token_required
 def get_due_user_words(current_user):
 
@@ -84,7 +84,7 @@ def get_due_user_words(current_user):
     
     return res
 
-@main.route('/update-word-meaning', methods=['POST'])
+@main.route('/api/update-word-meaning', methods=['POST'])
 @token_required
 def update_word_meaning(current_user):
     word_data = request.get_json(force=True)
@@ -97,7 +97,7 @@ def update_word_meaning(current_user):
     res = make_response(jsonify({"message": "OK"}), 201)
     return res
 
-@main.route('/finish-test', methods=['POST'])
+@main.route('/api/finish-test', methods=['POST'])
 @token_required
 def finish_test(current_user):
     req = request.get_json()

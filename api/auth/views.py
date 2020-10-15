@@ -10,7 +10,7 @@ from ..decorators import token_required
 from ..config import config
 
 
-@auth.route('/create-user', methods=['POST'])
+@auth.route('/api/create-user', methods=['POST'])
 def create_user():
     data = request.get_json()
     if User.query.filter_by(email=data['email']).first() is not None:
@@ -26,7 +26,7 @@ def create_user():
     return make_response(jsonify({"message": "CREATED"}), 201)
 
 
-@auth.route('/login', methods=['POST'])
+@auth.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
 
