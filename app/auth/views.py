@@ -7,7 +7,7 @@ from ..models import User
 from .. import db
 from . import auth
 from ..decorators import token_required
-from ..config import config
+from config import config
 
 
 @auth.route('/api/create-user', methods=['POST'])

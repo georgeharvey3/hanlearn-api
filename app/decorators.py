@@ -3,7 +3,7 @@ from functools import wraps
 import jwt
 
 from .models import User
-from .config import config
+from config import config
 
 
 def token_required(f):
