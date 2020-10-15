@@ -1,14 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from config import config
 
 db = SQLAlchemy()
 
 def create_app():
-    app = Flask(__name__, static_folder="../build", static_url_path="/")
+    app = Flask(__name__, static_folder="../hanlearn-react/build", static_url_path="/")
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hanlearn_dev.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = 'learnzhongwen'
+    app.config.from_object(config['dev'])
 
     db.init_app(app)
 
