@@ -49,8 +49,7 @@ def new_due_date(bank):
         1: 1,
         2: 3,
         3: 7,
-        4: 30,
-        5: 60
+        4: 30
     }
 
     new_date = (datetime.utcnow() + timedelta(days=intervals[bank])).date()
