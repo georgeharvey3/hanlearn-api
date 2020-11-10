@@ -4,7 +4,10 @@ __pycache__/
 *$py.class
 
 # C extensions
-*.so
+*.s
+
+# database
+*.db
 
 # Distribution / packaging
 .Python
