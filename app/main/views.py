@@ -111,7 +111,7 @@ def finish_test(current_user):
             w.bank -= 1
         
         if w.bank > 4:
-            UserWord.query.filter_by(word_id=word['word_id']).delete()
+            db.session.delete(w)
             db.session.commit()
         else:
             w.due_date = new_due_date(w.bank)
