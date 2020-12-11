@@ -33,10 +33,10 @@ def login():
     user = User.query.filter_by(email=data['email']).first()
 
     if user is None:
-        return make_response(jsonify({"message": "NO_SUCH_ACCOUNT"}), 400)
+        return make_response(jsonify({"message": "No Such Account"}), 400)
     
     if not user.verify_password(data['password']):
-        return make_response(jsonify({"message": "INVALID_PASSWORD"}), 400)
+        return make_response(jsonify({"message": "Invalid Password"}), 400)
 
     exp = datetime.datetime.utcnow() + datetime.timedelta(days=1)
     
