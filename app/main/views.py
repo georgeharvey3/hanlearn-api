@@ -4,7 +4,7 @@ from .. import db
 from ..models import Word, User, UserWord
 from ..helpers import new_due_date, overdue_by, process_word_row
 from ..decorators import token_required
-
+from datetime import datetime
 
 @main.route('/api/add-word', methods=['POST'])
 def add_word():
@@ -15,6 +15,9 @@ def add_word():
     w = Word.query.filter_by(id=word['id']).first()
 
     uw = UserWord(user=u, word=w)
+
+    date_obj = datetime.utcnow()
+    uw.due_date = date_obj.strftime("%Y/%m/%d")
 
     db.session.add(uw)
     db.session.commit()

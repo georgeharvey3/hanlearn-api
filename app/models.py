@@ -31,9 +31,10 @@ class UserWord(db.Model):
     word_id = db.Column(db.Integer, db.ForeignKey('words.id'), primary_key=True)
     ammended_meaning = db.Column(db.String(1024))
     bank = db.Column(db.Integer, default=1)
-    due_date = db.Column(db.String(12), default=datetime.utcnow().date().strftime("%Y/%m/%d"))
+    due_date = db.Column(db.String(12))
     user = db.relationship("User", back_populates='words')
     word = db.relationship("Word")
+
 
 class User(db.Model):
     __tablename__ = 'users'
