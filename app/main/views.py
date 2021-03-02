@@ -108,18 +108,14 @@ def finish_test(current_user):
     for word in req['scores']:
         w = current_user_words.filter_by(word_id=word['word_id']).first()
 
-        if word['score'] == 4:
+        if word['score'] == 4 and w.bank < 5:
             w.bank += 1
         if word['score'] < 3 and w.bank > 1:
             w.bank -= 1
         
-        if w.bank > 4:
-            db.session.delete(w)
-            db.session.commit()
-        else:
-            w.due_date = new_due_date(w.bank)
-            db.session.add(w)
-            db.session.commit()
+        w.due_date = new_due_date(w.bank)
+        db.session.add(w)
+        db.session.commit()
     
     res = make_response(jsonify({"message": "OK"}), 201)
 
