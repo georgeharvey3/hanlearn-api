@@ -16,4 +16,5 @@ Unidecode==1.1.1
 urllib3==1.25.8
 virtualenv==20.0.31
 virtualenv-clone==0.5.4
+google_trans_new==1.1.9
 Werkzeug==0.16.1
