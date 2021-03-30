@@ -5,6 +5,7 @@ from ..models import Word, User, UserWord
 from ..helpers import new_due_date, overdue_by, process_word_row
 from ..decorators import token_required
 from datetime import datetime
+from google_trans_new import google_translator
 
 @main.route('/api/add-word', methods=['POST'])
 def add_word():
@@ -118,5 +119,16 @@ def finish_test(current_user):
         db.session.commit()
     
     res = make_response(jsonify({"message": "OK"}), 201)
+
+    return res
+
+@main.route('/api/translate-sentence', methods=['POST'])
+def tranlate_sentence():
+    req = request.get_json()
+    sentence = req['sentence']
+    translator = google_translator()
+    translated = translator.translate(sentence, lang_tgt='en')
+
+    res = make_response(jsonify({'translated': translated}))
 
     return res
