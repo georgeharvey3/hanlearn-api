@@ -4,7 +4,7 @@ from .. import db
 from ..models import Word, User, UserWord
 from ..helpers import new_due_date, overdue_by, process_word_row
 from ..decorators import token_required
-from datetime import datetime
+from datetime import datetime, timedelta
 from google_trans_new import google_translator
 
 @main.route('/api/add-word', methods=['POST'])
@@ -17,7 +17,12 @@ def add_word():
 
     uw = UserWord(user=u, word=w)
 
-    date_obj = datetime.utcnow()
+    if len(UserWord.query.all()) > 9:
+        date_obj = datetime.utcnow() + timedelta(days=1)
+    else:
+        date_obj = datetime.utcnow()
+        print(date_obj)
+
     uw.due_date = date_obj.strftime("%Y/%m/%d")
 
     db.session.add(uw)
@@ -61,7 +66,7 @@ def get_user_words(current_user):
     user_word_entries = UserWord.query.filter_by(user_id=current_user.id).all()
     user_words_sorted = sorted(user_word_entries, key=lambda x: x.due_date)
     ammended_dict = {uw.word_id: uw.ammended_meaning for uw in user_words_sorted}
-    words = [process_word_row(user_word.word.as_dict(), user_word.due_date) for user_word in user_words_sorted]
+    words = [process_word_row(user_word.word.as_dict(), user_word.due_date, user_word.bank) for user_word in user_words_sorted]
 
     for word in words:
         if ammended_dict[word['id']]:

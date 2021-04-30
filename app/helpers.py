@@ -2,7 +2,7 @@ import re
 import unidecode
 from datetime import datetime, timedelta
 
-def process_word_row(db_row, due_date=None):
+def process_word_row(db_row, due_date=None, bank=None):
     meanings = db_row['meaning'].split('/')
     meanings = [meaning for meaning in meanings[:3] if meaning]
     cleanings = []
@@ -27,7 +27,7 @@ def process_word_row(db_row, due_date=None):
 
     word_dict = {'simp': db_row['simp'], 'trad': db_row['trad'],
                     'id': db_row['id'], 'meaning': cleanings,
-                    'pinyin': pinyin, 'due_date': due_date}
+                    'pinyin': pinyin, 'due_date': due_date, 'bank': bank}
     return word_dict
 
 def process_clash_row(db_row):
