@@ -18,10 +18,11 @@ def process_word_row(db_row, due_date=None, bank=None):
                     meaning = meaning.replace('to ', '')
                 if meaning.startswith('the '):
                     meaning = meaning.replace('the ', '')
+                meaning = ' '.join(meaning.split())
                 cleanings.append(unidecode.unidecode(meaning))
     if len(cleanings) == 0:
         cleanings.append('---')
-    cleanings = '/'.join(cleanings)
+    cleanings = '/'.join(set(cleanings))
     pinyin = db_row['pinyin'].lstrip('[')
     pinyin = pinyin.rstrip(']')
 

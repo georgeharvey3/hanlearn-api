@@ -116,8 +116,8 @@ def finish_test(current_user):
 
         if word['score'] == 4 and w.bank < 5:
             w.bank += 1
-        if word['score'] < 3 and w.bank > 1:
-            w.bank -= 1
+        if word['score'] < 4:
+            w.bank = 1
         
         w.due_date = new_due_date(w.bank)
         db.session.add(w)
