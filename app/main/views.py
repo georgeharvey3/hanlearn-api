@@ -161,10 +161,62 @@ def get_chengyu():
 
     random.shuffle(meaning_options)
 
-    res = make_response(jsonify({
+    char_results = []
+
+    for c in chengyu_chinese:
+        trads = []
+        pinyins = []
+        meanings = []
+
+        words = Word.query.filter_by(simp=c).all()
+
+        for w in words:
+            trads.append(w.trad)
+            pinyins.append(w.pinyin[1:-1])
+            meanings.extend(w.meaning.split("/"))
+        
+        result = {
+            'char': c,
+            'trads': [t for t in set(trads) if t][:10],
+            'pinyins': [p for p in set(pinyins) if p][:10],
+            'meanings': [m for m in set(meanings) if m][:10]
+        }
+
+        char_results.append(result)
+
+    res = {
         'chengyu': chengyu_chinese, 
         'options': meaning_options,
-        'correct': correct
-        }))
+        'correct': correct,
+        'char_results': char_results
+        }
+    
         
     return res
+
+@main.route('/api/lookup-chengyu-char/<char>')
+def lookup_chengyu_char(char):
+
+    trads = []
+    pinyins = []
+    meanings = []
+
+    words = Word.query.filter_by(simp=char).all()
+
+    for w in words:
+        trads.append(w.trad)
+        pinyins.append(w.pinyin[1:-1])
+        meanings.extend(w.meaning.split("/"))
+    
+    res = make_response(jsonify({
+        'trads': trads,
+        'pinyins': pinyins,
+        'meanings': meanings
+    }))
+
+    return res
+
+    
+    
+
+
