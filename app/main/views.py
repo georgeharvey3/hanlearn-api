@@ -4,7 +4,8 @@ from .. import db
 from ..models import Word, User, UserWord
 from ..helpers import new_due_date, overdue_by, process_word_row
 from ..decorators import token_required
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
+import random
 from google_trans_new import google_translator
 
 @main.route('/api/add-word', methods=['POST'])
@@ -136,4 +137,34 @@ def tranlate_sentence():
 
     res = make_response(jsonify({'translated': translated}))
 
+    return res
+
+@main.route('/api/get-chengyu')
+def get_chengyu():
+    file = "./app/chengyus.txt"
+
+    with open(file) as f:
+        chengyus = f.readlines()
+
+    base_date = date(2021, 5, 24)
+    today = datetime.utcnow().date()
+    index = (today - base_date).days % len(chengyus)
+    chengyu = chengyus.pop(index)
+
+    options = random.sample(chengyus, 3)
+    
+    options.append(chengyu)
+
+    chengyu_chinese = chengyu.split('/')[0]
+    correct = chengyu.split('/')[-1]
+    meaning_options = [m.split('/')[-1] for m in options]
+
+    random.shuffle(meaning_options)
+
+    res = make_response(jsonify({
+        'chengyu': chengyu_chinese, 
+        'options': meaning_options,
+        'correct': correct
+        }))
+        
     return res
