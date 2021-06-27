@@ -25,6 +25,7 @@ def process_word_row(db_row, due_date=None, bank=None):
     cleanings = '/'.join(set(cleanings))
     pinyin = db_row['pinyin'].lstrip('[')
     pinyin = pinyin.rstrip(']')
+    pinyin = pinyin.replace('u:', 'v')
 
     word_dict = {'simp': db_row['simp'], 'trad': db_row['trad'],
                     'id': db_row['id'], 'meaning': cleanings,
