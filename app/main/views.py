@@ -122,8 +122,8 @@ def finish_test(current_user):
             w.bank = 1
 
         w.due_date = new_due_date(w.bank)
-        
-        c = Word.query.filter_by(id=w.id)
+
+        c = Word.query.filter_by(id=w.word_id).first()
         new_dates[c.simp] = w.due_date
         db.session.add(w)
         db.session.commit()
