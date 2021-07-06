@@ -112,6 +112,7 @@ def update_word_meaning(current_user):
 def finish_test(current_user):
     req = request.get_json()
     current_user_words = current_user.words
+    new_dates = {}
     for word in req['scores']:
         w = current_user_words.filter_by(word_id=word['word_id']).first()
 
@@ -121,10 +122,11 @@ def finish_test(current_user):
             w.bank = 1
         
         w.due_date = new_due_date(w.bank)
+        new_dates[word] = w.due_date
         db.session.add(w)
         db.session.commit()
     
-    res = make_response(jsonify({"message": "OK"}), 201)
+    res = make_response(jsonify({"message": "OK", "new_dates": new_dates}), 201)
 
     return res
 
