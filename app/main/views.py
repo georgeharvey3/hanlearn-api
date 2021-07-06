@@ -120,9 +120,11 @@ def finish_test(current_user):
             w.bank += 1
         if word['score'] < 4:
             w.bank = 1
-        
+
         w.due_date = new_due_date(w.bank)
-        new_dates[word] = w.due_date
+        
+        c = Word.query.filter_by(id=w.id)
+        new_dates[c.simp] = w.due_date
         db.session.add(w)
         db.session.commit()
     
