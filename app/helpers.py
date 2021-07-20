@@ -19,6 +19,8 @@ def process_word_row(db_row, due_date=None, bank=None):
                 if meaning.startswith('the '):
                     meaning = meaning.replace('the ', '')
                 meaning = ' '.join(meaning.split())
+                if '!' in meaning:
+                    meaning = meaning.replace('!', '').lower()
                 cleanings.append(unidecode.unidecode(meaning))
     if len(cleanings) == 0:
         cleanings.append('---')
