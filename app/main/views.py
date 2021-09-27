@@ -7,6 +7,7 @@ from ..decorators import token_required
 from datetime import datetime, timedelta, date
 import random
 from google_trans_new import google_translator
+from reverso_api.context import ReversoContextAPI
 
 @main.route('/api/add-word', methods=['POST'])
 def add_word():
@@ -58,6 +59,31 @@ def get_word(character, char_set):
 
     res = make_response(jsonify({"words": word_dicts}), 200)
 
+    return res
+
+@main.route('/api/get-sentences/<word>')
+def get_sentences(word):
+    search = ReversoContextAPI(word, source_lang='zh')
+    
+    examples = search.get_examples()
+    
+    examples_list = [next(examples) for _ in range(10)]
+    
+    examples_list = [{
+        'chinese': {
+            'sentence': ex[0].text,
+            'highlight': ex[0].highlighted
+            },
+        'english': {
+            'sentence': ex[1].text,
+            'highlight': ex[1].highlighted
+            }
+        } for ex in examples_list]
+    
+    random.shuffle(examples_list)
+
+    res = make_response(jsonify({'sentences': examples_list}), 200)
+    
     return res
 
 @main.route('/api/get-user-words')
