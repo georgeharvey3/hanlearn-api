@@ -239,9 +239,10 @@ def lookup_chengyu_char(char):
         meanings.extend(w.meaning.split("/"))
     
     res = make_response(jsonify({
+        'simp': char,
         'trads': trads,
         'pinyins': pinyins,
-        'meanings': meanings
+        'meanings': [m for m in meanings if m]
     }))
 
     return res
