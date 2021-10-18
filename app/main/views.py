@@ -67,7 +67,9 @@ def get_sentences(word):
     
     examples = search.get_examples()
     
-    examples_list = [next(examples) for _ in range(10)]
+    examples_list = [next(examples) for _ in range(20)]
+
+    examples_list = sorted(examples_list, key=lambda e: len(e))
     
     examples_list = [{
         'chinese': {
@@ -78,7 +80,7 @@ def get_sentences(word):
             'sentence': ex[1].text,
             'highlight': ex[1].highlighted
             }
-        } for ex in examples_list]
+        } for ex in examples_list[:10]]
     
     random.shuffle(examples_list)
 
