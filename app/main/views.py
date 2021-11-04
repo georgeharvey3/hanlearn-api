@@ -6,6 +6,7 @@ from ..helpers import new_due_date, overdue_by, process_word_row
 from ..decorators import token_required
 from datetime import datetime, timedelta, date
 import random
+import re
 from google_trans_new import google_translator
 from reverso_api.context import ReversoContextAPI
 
@@ -66,9 +67,19 @@ def get_sentences(word):
     search = ReversoContextAPI(word, source_lang='zh')
     
     examples = search.get_examples()
-    
-    examples_list = [next(examples) for _ in range(20)]
 
+    examples_list = []
+
+    while len(examples_list < 20):
+        try:
+            sentence = next(examples)
+
+            if re.search('[a-zA-Z]', sentence) is None:
+                examples_list.append(next(examples))
+                
+        except StopIteration:
+            break
+    
     examples_list = sorted(examples_list, key=lambda e: len(e))
     
     examples_list = [{
