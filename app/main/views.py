@@ -70,13 +70,13 @@ def get_sentences(word):
 
     examples_list = []
 
-    while len(examples_list < 20):
+    while len(examples_list) < 20:
         try:
             sentence = next(examples)
 
-            if re.search('[a-zA-Z]', sentence) is None:
-                examples_list.append(next(examples))
-                
+            if re.search('[a-zA-Z]', sentence[0].text) is None:
+                examples_list.append(sentence)
+
         except StopIteration:
             break
     
