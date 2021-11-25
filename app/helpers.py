@@ -14,10 +14,6 @@ def process_word_row(db_row, due_date=None, bank=None):
                 meaning = re.sub(r'\([^)]*\)', '', meaning)
                 meaning = meaning.strip()
             if len(meaning) < 20: 
-                if meaning.startswith('to '):
-                    meaning = meaning.replace('to ', '')
-                if meaning.startswith('the '):
-                    meaning = meaning.replace('the ', '')
                 meaning = ' '.join(meaning.split())
                 if '!' in meaning:
                     meaning = meaning.replace('!', '').lower()
