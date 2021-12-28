@@ -9,6 +9,22 @@ import random
 import re
 from google_trans_new import google_translator
 from reverso_api.context import ReversoContextAPI
+import jieba
+
+def get_filtered_words(words):
+    results = []
+
+    for word in words:
+        word_query = Word.query.filter_by(simp=word).first()
+
+        if bool(word_query):
+            results.append(word_query.as_dict())
+        elif re.findall(r'[\u4e00-\u9fff]+', word) and re.findall(r'[\u4e00-\u9fff]+', word)[0] == word:
+            for char in word:
+                char_query = Word.query.filter_by(simp=char).first()
+                results.append(char_query.as_dict())
+    
+    return results
 
 @main.route('/api/add-word', methods=['POST'])
 def add_word():
@@ -85,7 +101,8 @@ def get_sentences(word):
     examples_list = [{
         'chinese': {
             'sentence': ex[0].text,
-            'highlight': ex[0].highlighted
+            'highlight': ex[0].highlighted,
+            'words': get_filtered_words(jieba.cut(ex[0].text, cut_all=False))
             },
         'english': {
             'sentence': ex[1].text,
