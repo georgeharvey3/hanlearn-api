@@ -97,12 +97,12 @@ def get_sentences(word):
             break
     
     examples_list = sorted(examples_list, key=lambda e: len(e))
-    
+
     examples_list = [{
         'chinese': {
             'sentence': ex[0].text,
             'highlight': ex[0].highlighted,
-            'words': get_filtered_words(jieba.cut(ex[0].text, cut_all=False))
+            'words': get_filtered_words(jieba.cut(ex[0].text.split(word)[0], cut_all=False)) + [word] +get_filtered_words(jieba.cut(ex[0].text.split(word)[1], cut_all=False))
             },
         'english': {
             'sentence': ex[1].text,
