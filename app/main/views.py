@@ -78,6 +78,31 @@ def get_word(character, char_set):
 
     return res
 
+@main.route('/api/get-one-sentence/<word>')
+def get_one_sentence(word):
+    search = ReversoContextAPI(word, source_lang='zh')
+
+    examples = search.get_examples()
+
+    examples_list = []
+
+    while len(examples_list) < 20:
+        try:
+            sentence = next(examples)
+
+            if re.search('[a-zA-Z]', sentence[0].text) is None:
+                examples_list.append(sentence)
+
+        except StopIteration:
+            break
+
+    examples_list = sorted(examples_list, key=lambda e: len(e))
+
+    res = make_response(jsonify({'sentence': random.choice(examples_list[:10])}))
+
+    return res
+
+
 @main.route('/api/get-sentences/<word>')
 def get_sentences(word):
     search = ReversoContextAPI(word, source_lang='zh')
@@ -102,7 +127,7 @@ def get_sentences(word):
         'chinese': {
             'sentence': ex[0].text,
             'highlight': ex[0].highlighted,
-            'words': get_filtered_words(jieba.cut(ex[0].text.split(word)[0], cut_all=False)) + [word] +get_filtered_words(jieba.cut(ex[0].text.split(word)[1], cut_all=False))
+            'words': get_filtered_words(jieba.cut(ex[0].text.split(word)[0], cut_all=False)) + [word] + get_filtered_words(jieba.cut(ex[0].text.split(word)[1], cut_all=False))
             },
         'english': {
             'sentence': ex[1].text,
