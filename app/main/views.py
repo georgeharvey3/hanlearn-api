@@ -27,14 +27,13 @@ def get_filtered_words(words):
     return results
 
 @main.route('/api/add-word', methods=['POST'])
-def add_word():
+@token_required
+def add_word(current_user):
     word = request.get_json(force=True)
-
-    u = User.query.all()[0]
 
     w = Word.query.filter_by(id=word['id']).first()
 
-    uw = UserWord(user=u, word=w)
+    uw = UserWord(user=current_user, word=w)
 
     if len(UserWord.query.all()) > 9:
         date_obj = datetime.utcnow() + timedelta(days=1)
@@ -52,12 +51,10 @@ def add_word():
     return res
 
 @main.route('/api/remove-word', methods=['POST'])
-def remove_word():
+def remove_word(current_user):
     word_id = request.get_json(force=True)
 
-    u = User.query.all()[0]
-
-    uw = u.words.filter_by(word_id=word_id).first()
+    uw = current_user.words.filter_by(word_id=word_id).first()
     if uw:
         db.session.delete(uw)
 
